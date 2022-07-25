@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="" id="app">
+
+  </div>
+   <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+   <script>
+     const { effect,reactive,shallowReactive,readonly, shallowReadonly}  = VueReactivity
+     let user = reactive(({
+       name:'shallow',
+       age:99,
+       arr:[1,2,3]
+     }))
+
+     // 取值时把 effect 收集起来 ，设置值时执行effect
+     effect(()=>{
+       console.log('render=>>');
+      //  user.other
+      //  user.name
+      //  app.innerHTML =`name is ${user.name },age is ${user.age}`
+       app.innerHTML = user.arr
+     })
+     setTimeout(() => {
+        // user.name='cxx'
+        user.other=1
+       }, 1000);
+
+       // 1. 在effect中的所有属性，都会收集到 effect. => track
+       // 2. 当effect 属性中发生变化 ，会重新执行对应的 effect. ==> triger
+   </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="" id="app">
+
+  </div>
+   <script src="../node_modules/@vue/reactivity/dist/reactivity.global.js"></script>
+   <script>
+     const { ref , computed,toRef,isRef,toRefs,shallowRef, reactive,effect}  = VueReactivity
+      const counter = ref(1)
+      const doubleCounter = computed(()=> {
+        debugger
+        return counter.value*2
+      })
+      const doubleCounterr = computed(()=>{ 
+        debugger
+        return doubleCounter.value*2
+      })
+     effect(()=>{
+       console.log('render=>>');
+       app.innerHTML = `doubleCounter:${doubleCounterr.value}<br/>
+        counter:$1{counter.value}`
+     })
+     window.counter = counter
+     window.doubleCounter = doubleCounter
+
+      // watchEffect -> runtime-core  ->  watch -> watch flush post
+   </script>
+</body>
+</html>

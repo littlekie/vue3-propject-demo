@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    :root{
+      --color:red;
+    }
+    #app{
+      color: var(--color);
+    }
+  </style>
+</head>
+<body>
+  <div id='app'>
+    <p>蓝色</p>
+<div>绿色</div>
+<div id="alert">红色</div>
+    name:{{shallowReactiveState.name}}
+    <div></div>
+    age: {{shallowReactiveState.age.number}}
+    <button @click="changeAge">changeAge</button>
+    <button @click="changeName">changeName</button>
+    <div>counter:{{counter}}</div>
+    <div>twiceTheCounter:{{twiceTheCounter}}</div>
+    <div>b:{{b}}</div>
+  </div>
+  <!-- <script src="./reactivity.global.js"></script> -->
+  <script src="./vue.global.js"></script>
+  <script setup lang="jsx">
+    const {effect,onMounted,ref,toRefs,watch,computed ,
+      createApp,h, reactive, shallowReactive, readonly,
+       shallowReadonly, isReactive,watchEffect
+       } = Vue
+
+    //  window.readonlyState = readonly(({
+    //    name:'shallow',
+    //    age:{
+    //      number:12
+    //    }
+    //  }))
+    //  readonlyState.age.number = 100
+    //  console.log(readonlyState)
+    //  window.reactiveState = reactive(({
+    //    name:'shallow',
+    //    age:{
+    //      number:99
+    //    }
+    //  }))
+    //  reactiveState.age.number = 100
+    //  console.log(reactiveState)
+    //  window.shallowReactiveState = shallowReactive(({
+    //    name:'shallow',
+    //    age:{
+    //      number:99
+    //    }
+    //  }))
+    //  shallowReactiveState.name = "cxx"
+    //  shallowReactiveState.age.number = "cxx"
+    //  console.log(shallowReactiveState)
+    // window.user = reactive(({
+    //    name:'shallow',
+    //    age:99,
+    //    arr:[1,2,3]
+    //  }))
+    //  console.log(user)
+    //  effect(()=>{
+    //    console.log('render=>>');
+    //   //  user.other
+    //   //  user.name
+    //   //  app.innerHTML =`name is ${user.name },age is ${user.age}`
+    //    app.innerHTML = user.arr[2]
+    //  })
+    //  setTimeout(() => {
+    //     // user.name='cxx'
+    //     user.arr.length=1
+    //    }, 1000);
+    debugger
+    createApp({
+      data(){
+        return {
+          name:'zmj'
+        }
+      },
+      mounted(){
+        console.log('2.mounted');
+      },
+      watch:{
+        counter(newValue, old){
+          console.log('new',newValue);
+        }
+      },
+      setup() {
+        console.log('1.setup');
+        onMounted(()=>{
+      console.log('onMounted');
+    })
+        window.shallowReactiveState = shallowReactive(({
+          name: 'cxx',
+          counter:99,
+          age: {
+            number: 99
+          }
+        }))
+
+        const counter = ref(0)
+        watch(counter, (newValue, oldValue) => {
+          console.log('The new counter value is: ' + newValue)
+        },{deep: true})
+        window.counter = counter
+
+        let name = ref('cxx')
+        window.roRefs = toRefs(shallowReactiveState)
+        console.log('roRefss',roRefs);
+        console.log('name:',name);
+        // setTimeout(() => {
+        //   shallowReactiveState.age.number = 1000
+        // }, 1000);
+        // setTimeout(() => {
+        //   shallowReactiveState.name = 'zmj'
+        // }, 2000);
+        function changeName(params) {
+          shallowReactiveState.name = 'zmj'
+        }
+        function changeAge(params) {
+          shallowReactiveState.age.number = 1000
+          console.log('twiceTheCounter',twiceTheCounter);
+        }
+        const twiceTheCounter = computed(() => {
+          return counter.value *2
+        })
+const plusOne = computed({
+  get: () => counter.value + 1,
+  set: val => {
+    counter.value = val - 1
+  }
+})
+window.plusOne =plusOne
+console.log(counter.value) // 0
+plusOne.value = 1
+console.log(counter.value) // 0
+
+const a =ref(1)
+const b = 2*a.value
+window.a=a
+        return {
+          shallowReactiveState,
+          changeName,
+          changeAge,
+          counter,
+          twiceTheCounter,
+          b
+        }
+      },
+
+      // render(){
+      //   console.log('render～～');
+      //   return `<div>${shallowReactiveState.name}</div><div>${shallowReactiveState.age.number}</div>`
+      // }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>
